@@ -1,0 +1,82 @@
+---
+title: "Lab 4"
+author: "Nathaniel Gunter"
+date: "2/3/2020"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(s20x)
+```
+## Task 1
+
+```{r}
+getwd()
+```
+
+## Task 2
+
+```{r}
+spruce.df<- read.csv("SPRUCE.csv")
+tail(spruce.df)
+```
+
+## Task 3
+```{r}
+with(spruce.df, trendscatter(x=BHDiameter, y=Height, f=0.5))
+```
+
+
+```{r}
+spruce.lm<-with(spruce.df,lm(Height~BHDiameter))
+height.res<-with(spruce.df,residuals(spruce.lm))
+height.fit<-fitted(spruce.lm)
+plot(x=height.fit,y=height.res)
+```
+
+```{r}
+trendscatter(x=height.fit,y=height.res,f=0.5)
+```
+
+```{r}
+plot(spruce.lm, which=1)
+```
+
+```{r}
+normcheck(spruce.lm,shapiro.wilk=TRUE)
+```
+
+## Task 4
+
+```{r}
+quad.lm = lm(Height~BHDiameter + I(BHDiameter^2),data=spruce.df)
+```
+
+```{r}
+with(spruce.df,plot(Height~BHDiameter,bg="Blue",pch=21,cex=1.2,
+ylim=c(0,max(Height)),xlim=c(0,max(BHDiameter))))
+
+f<-function(x){quad.lm$coefficients[1]+quad.lm$coefficients[2]*x+quad.lm$coefficients[3]*x^2}
+
+curve(f, lwd=2, col="steelblue",add=TRUE)
+```
+
+```{r}
+quad.fit<-with(spruce.df,fitted(quad.lm))
+plot(quad.lm,which=1)
+```
+
+```{r}
+normcheck(quad.lm,shapiro.wil=TRUE)
+```
+
+## Task 5
+
+```{r}
+summary(quad.lm)
+```
+
