@@ -42,6 +42,8 @@ plot(x=height.fit,y=height.res)
 trendscatter(x=height.fit,y=height.res,f=0.5)
 ```
 
+The plot is a downward-facing quadratic, as opposed to the roughly square root like plot seen in Task 3.
+
 ```{r}
 plot(spruce.lm, which=1)
 ```
@@ -49,6 +51,8 @@ plot(spruce.lm, which=1)
 ```{r}
 normcheck(spruce.lm,shapiro.wilk=TRUE)
 ```
+
+The p-value for the Shapiro-Wilk is 0.29. The NULL hypothesis is that the population is a normal distribution. In this case, we expect that the residuals should be normal distribution so we should see a large p-value. Because the p-value is relatively low at 0.29, we conclude that a straight line is not a valid model for this data set.
 
 ## Task 4
 
@@ -74,9 +78,72 @@ plot(quad.lm,which=1)
 normcheck(quad.lm,shapiro.wil=TRUE)
 ```
 
+The Shapiro-Wilk p-value is 0.684, which is higher than that for the linear model, so the quadratic model better describes the data. 
+
 ## Task 5
 
 ```{r}
 summary(quad.lm)
 ```
 
+The value of $\hat{\beta_0}$ is 0.860896, the value of $\hat{\beta_1}$ is 1.469592, and the value of $\hat{\beta_2}$ is -0.027457. Therefore, the equation of the fitted line is $y = 0.860896 + 1.469592 \times x - 0.027457 \times x^2$
+
+```{r}
+predict(quad.lm,data.frame(BHDiameter=c(15,18,20)))
+```
+
+With the linear model, we predicted that the height at 15 cm in diameter was 16.36895, height at 18 cm in diameters was 17.81338, and height at 20 cm in diameter was 18.77632. The multiple $R^2$ for the quadratic model is 0.7741, larger than the linear multiple $R^2$ of 0.6569. Based on the adjusted $R^2$, the quadratic model is "better" for this data. The multiple $R^2$ is interpreted as the percentage of variance in the dependent variable that can be explained by the model. Based on this definition, the quadratic model explains the most variability in Height.
+
+```{r}
+anova(spruce.lm)
+anova(quad.lm)
+```
+
+The quadratic model has an additional predictor that is given a very high sigificance based on ANOVA, so there must be something that the linear model is missing.
+
+```{r}
+height.qfit<-fitted(quad.lm)
+RSS <- with(spruce.df,sum(Height-height.qfit)^2)
+MSS<-with(spruce.df,sum((height.qfit-mean(Height))^2))
+TSS<-with(spruce.df,sum((Height-mean(Height))^2))
+RSS
+MSS
+TSS
+MSS/TSS
+```
+
+## Task 6
+
+```{r}
+cooks20x(quad.lm)
+```
+
+The cooks distance for a given observation is a measure of how much the model changes when that observation is removed from the data set. This gives an estimate of the importance of potential outliers. The larger the cooks distance, the more influential, and therefore more interesting, the point. For our quadratic model, the cooks distance tells us that the 24th observation is the most influential, so we may want to investigate it as a potential outlier.
+
+
+```{r}
+quad2.lm=lm(Height~BHDiameter+I(BHDiameter^2),data=spruce.df[-24,])
+summary(quad2.lm)
+summary(quad.lm)
+```
+
+After removing the 24th observation, the adjusted $R^2$ increases by approximately 0.04, suggesting that the removal improved how well a quadratic model fit the data. Additionally, the p-values for individual predictors decreased, suggesting again that the data is better described. Therefore, we can conclude that the cooks distance can be used to identify potential outliers that make the data easer to fit when removed.
+
+## Task 7
+
+$$
+TODO LATEX PROOF: DO AT HOME
+$$
+
+```{r}
+sp2.df=within(spruce.df, X<-(BHDiameter-18)*(BHDiameter>18))
+lmp=lm(Height~BHDiameter + X,data=sp2.df)
+tmp=summary(lmp)
+myf = function(x,coef){
+  coef[1]+coef[2]*(x) + coef[3]*(x-18)*(x-18>0)
+}
+plot(spruce.df,main="Piecewise regression")
+curve(myf(x,coef=tmp$coefficients[,"Estimate"] ),add=TRUE, lwd=2,col="Blue")
+abline(v=18)
+text(18,12,paste("R sq.=",round(tmp$r.squared,4) ))
+```
