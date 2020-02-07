@@ -1679,8 +1679,33 @@ summary(quad2.lm)</code></pre>
 </div>
 <div id="task-7" class="section level2">
 <h2>Task 7</h2>
+<p>The graph is represented by two lines</p>
 <p><span class="math display">\[
-TODO LATEX PROOF: DO AT HOME
+l_1 : y=\beta_0 + \beta_1 x, \  \ x\leq x_k \\
+l_2 : y=\beta_0 + \delta + (\beta_1+\xi)x, \ x&gt; x_k .
+\]</span></p>
+<p>At the intersection (called the knot), <span class="math inline">\(y=y_k\)</span> and <span class="math inline">\(x = x_k\)</span> for both of the lines. By substitution, we can then see that</p>
+<p><span class="math display">\[
+y_1 = y_2 \\
+\implies \beta_0 + \beta_1 x_k = \beta_0 + \delta + (\beta_1+\xi)x_k\\
+\implies \delta = - \xi x_k
+\]</span> Then we can write line two as</p>
+<p><span class="math display">\[
+y_2=\beta_0-\xi x_k+(\beta_1+\xi)x \\
+\ = \beta_0-\xi x_k + \beta_1 x + \xi x \\
+\ =\beta_0+\beta_1 x + \xi (x-x_k) \\
+\ = l_1 + \xi (x-x_k)
+\]</span></p>
+<p>Now we want the function to be <span class="math inline">\(l_1\)</span> for <span class="math inline">\(x\leq x_k\)</span> and <span class="math inline">\(l_2\)</span> for <span class="math inline">\(x&gt;x_k\)</span>. We can do this with an indicator function <span class="math inline">\(I(x_k)\)</span> such that <span class="math display">\[ 
+I(x_k)=\left\{
+\begin{array}{ll}
+      1 &amp; x&gt; x_k \\
+      0 &amp; x\leq x_k \\
+\end{array} 
+\right..
+\]</span></p>
+<p>If we multiply the <span class="math inline">\(\xi (x-x_k)\)</span> by the indicator function, we then recover <span class="math inline">\(l_1\)</span> and <span class="math inline">\(l_2\)</span> where we want to and obtain the final expression <span class="math display">\[
+y = \beta_0 + \beta_1 x + I(x_k)\xi (x-x_k).
 \]</span></p>
 <pre class="r"><code>sp2.df=within(spruce.df, X&lt;-(BHDiameter-18)*(BHDiameter&gt;18))
 lmp=lm(Height~BHDiameter + X,data=sp2.df)

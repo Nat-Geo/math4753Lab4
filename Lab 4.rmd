@@ -131,8 +131,42 @@ After removing the 24th observation, the adjusted $R^2$ increases by approximate
 
 ## Task 7
 
+The graph is represented by two lines
+
 $$
-TODO LATEX PROOF: DO AT HOME
+l_1 : y=\beta_0 + \beta_1 x, \  \ x\leq x_k \\
+l_2 : y=\beta_0 + \delta + (\beta_1+\xi)x, \ x> x_k .
+$$
+
+At the intersection (called the knot), $y=y_k$ and $x = x_k$ for both of the lines. By substitution, we can then see that 
+
+$$
+y_1 = y_2 \\
+\implies \beta_0 + \beta_1 x_k = \beta_0 + \delta + (\beta_1+\xi)x_k\\
+\implies \delta = - \xi x_k
+$$
+Then we can write line two as 
+
+$$
+y_2=\beta_0-\xi x_k+(\beta_1+\xi)x \\
+\ = \beta_0-\xi x_k + \beta_1 x + \xi x \\
+\ =\beta_0+\beta_1 x + \xi (x-x_k) \\
+\ = l_1 + \xi (x-x_k)
+$$
+
+Now we want the function to be $l_1$ for $x\leq x_k$ and $l_2$ for $x>x_k$. We can do this with an indicator function $I(x_k)$ such that 
+$$ 
+I(x_k)=\left\{
+\begin{array}{ll}
+      1 & x> x_k \\
+      0 & x\leq x_k \\
+\end{array} 
+\right..
+$$
+
+If we multiply the $\xi (x-x_k)$ by the indicator function, we then recover $l_1$ and $l_2$ where we want to and obtain the final expression 
+$$
+y = \beta_0 + \beta_1 x + I(x_k)\xi (x-x_k).
 $$
 
 ```{r}
@@ -146,4 +180,14 @@ plot(spruce.df,main="Piecewise regression")
 curve(myf(x,coef=tmp$coefficients[,"Estimate"] ),add=TRUE, lwd=2,col="Blue")
 abline(v=18)
 text(18,12,paste("R sq.=",round(tmp$r.squared,4) ))
+```
+
+## Task 8
+
+```{r}
+library(math4753)
+dird = "C:/Users/Nathaniel Gunter/Documents/School/Junior Year/Spring/Applied Statistical Methods/Data/DATAxls/"
+csv = "ACCIDENTS.csv"
+acc = myread(csv,dird)
+summary(acc)
 ```
