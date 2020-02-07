@@ -1591,6 +1591,11 @@ plot(quad.lm,which=1)</code></pre>
 ## Multiple R-squared:  0.7741, Adjusted R-squared:  0.7604 
 ## F-statistic: 56.55 on 2 and 33 DF,  p-value: 2.182e-11</code></pre>
 <p>The value of <span class="math inline">\(\hat{\beta_0}\)</span> is 0.860896, the value of <span class="math inline">\(\hat{\beta_1}\)</span> is 1.469592, and the value of <span class="math inline">\(\hat{\beta_2}\)</span> is -0.027457. Therefore, the equation of the fitted line is <span class="math inline">\(y = 0.860896 + 1.469592 \times x - 0.027457 \times x^2\)</span></p>
+<pre class="r"><code>ciReg(quad.lm)</code></pre>
+<pre><code>##                 95 % C.I.lower    95 % C.I.upper
+## (Intercept)           -3.62525           5.34705
+## BHDiameter             0.97361           1.96558
+## I(BHDiameter^2)       -0.04096          -0.01396</code></pre>
 <pre class="r"><code>predict(quad.lm,data.frame(BHDiameter=c(15,18,20)))</code></pre>
 <pre><code>##        1        2        3 
 ## 16.72690 18.41740 19.26984</code></pre>

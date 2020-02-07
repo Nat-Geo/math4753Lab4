@@ -89,6 +89,10 @@ summary(quad.lm)
 The value of $\hat{\beta_0}$ is 0.860896, the value of $\hat{\beta_1}$ is 1.469592, and the value of $\hat{\beta_2}$ is -0.027457. Therefore, the equation of the fitted line is $y = 0.860896 + 1.469592 \times x - 0.027457 \times x^2$
 
 ```{r}
+ciReg(quad.lm)
+```
+
+```{r}
 predict(quad.lm,data.frame(BHDiameter=c(15,18,20)))
 ```
 
