@@ -189,5 +189,5 @@ library(math4753)
 dird = "C:/Users/Nathaniel Gunter/Documents/School/Junior Year/Spring/Applied Statistical Methods/Data/DATAxls/"
 csv = "ACCIDENTS.csv"
 acc = myread(csv,dird)
-summary(acc)
+head(acc)
 ```
